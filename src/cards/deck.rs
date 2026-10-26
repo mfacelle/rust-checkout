@@ -1,4 +1,4 @@
-use crate::card::{rank_value, Card, Rank, Suit};
+use super::card::{rank_value, Card, Rank, Suit};
 
 pub struct Deck {
     cards: Vec<Card>,
@@ -71,8 +71,8 @@ impl Deck {
 // AI-generated tests for Deck (kind of overkill for how simple this class is...)
 #[cfg(test)]
 mod tests {
+    use super::super::card::Rank;
     use super::Deck;
-    use crate::card::Rank;
 
     #[test]
     fn standard_deck_deck_has_52_cards() {
@@ -102,7 +102,8 @@ mod tests {
                 Rank::Seven => 7,
                 Rank::Eight => 8,
                 Rank::Nine => 9,
-                Rank::Ten | Rank::Jack | Rank::Queen | Rank::King | Rank::Ace => 10,
+                Rank::Ten | Rank::Jack | Rank::Queen | Rank::King => 10,
+                Rank::Ace => 11,
             };
             assert_eq!(card.value, expected_value);
         }

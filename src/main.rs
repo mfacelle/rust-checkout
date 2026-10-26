@@ -1,21 +1,18 @@
-mod card;
-mod deck;
+mod cards;
+mod game;
 
-use deck::Deck;
+use cards::deck::Deck;
+use cards::hand::Hand;
+use std::io;
 
-fn main() {
+fn main() -> io::Result<()> {
     let mut deck = Deck::standard_deck();
-    println!("Created a standard deck with {} cards.", deck.len());
 
-    println!("Shuffling the deck and drawing 10 cards");
-    
     deck.shuffle();
 
-    for _ in 0..10 {
-        if let Some(card) = deck.draw() {
-            println!("Drew: {card}.");
-        }
-    }
+    let mut hand = Hand::new(Hand::DEFAULT_BALATRO_HAND_SIZE);
 
-    println!("{} cards remain.", deck.len());
+    game::game_io::run_game(&mut deck, &mut hand)?;
+
+    Ok(())
 }
