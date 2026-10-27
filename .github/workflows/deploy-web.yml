@@ -1,0 +1,69 @@
+name: Deploy Web
+on:
+  push:
+    branches:
+      - dev/web_runner
+      - main
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build-wasm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Enable Cargo Caching
+        uses: swatinem/rust-cache@v2
+
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
+
+      # Compiles to WASM and generates npm/JS bindings, place outputs into web dir
+      - name: Build WebAssembly Package
+        run: wasm-pack build --release --target web --out-dir web
+
+      - name: Copy xterm dependencies
+        run: cp -r thirdparty web/
+
+      - name: Upload web package
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-package
+          path: web
+          if-no-files-found: error
+  
+  deploy-web:
+    needs: build-wasm
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web package
+        uses: actions/download-artifact@v4
+        with:
+          name: web-package
+          path: web
+
+      - name: Configure pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload pages artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: Deploy to github pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust-y Balatro</title>
+    <link rel="stylesheet" href="./thirdparty/xterm/xterm.css" />
+    <script src="./thirdparty/xterm/xterm.js"></script>
+</head>
+<body style="background: #1a1a1a; margin: 0; padding: 20px;">
+
+    <div id="terminal" style="width: 100%; height: 500px;"></div>
+
+    <!-- TODO need to add stuff to integrate with Rust -->
+    <script type="module">
+        const term = new Terminal({
+            cursorBlink: true,
+            theme: { background: '#1e1e1e' },
+            rows: 30,
+            cols: 120
+        });
+        term.open(document.getElementById('terminal'));
+
+        const writeOutput = (text) => {
+            if (text) {
+                term.write(text.replace(/\r?\n/g, '\r\n'));
+            }
+        };
+
+        try {
+            await init();
+            const game = new TerminalGame();
+            writeOutput(game.start());
+
+            let currentLine = '';
+            let previousWasCarriageReturn = false;
+            term.onData((data) => {
+                for (const character of data) {
+                    if (character === '\n' && previousWasCarriageReturn) {
+                        previousWasCarriageReturn = false;
+                        continue;
+                    }
+
+                    previousWasCarriageReturn = character === '\r';
+                    if (character === '\r' || character === '\n') {
+                        term.write('\r\n');
+                        writeOutput(game.input(currentLine));
+                        currentLine = '';
+                    } else if (character === '\u007F') {
+                        if (currentLine.length > 0) {
+                            currentLine = Array.from(currentLine).slice(0, -1).join('');
+                            term.write('\b \b');
+                        }
+                    } else if (character === '\u0003') {
+                        currentLine = '';
+                        term.write('^C\r\n> ');
+                    } else {
+                        currentLine += character;
+                        term.write(character);
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Failed to start Rust WebAssembly game:', error);
+            term.writeln(`Failed to start game: ${error}`);
+        }
+    </script>
+</body>
+</html>
