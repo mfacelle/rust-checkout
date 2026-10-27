@@ -1,12 +1,11 @@
 # rust-checkout
-Project for learning and exploring Rust.
+Implements a simple command-line version of the game Balatro, written in Rust, as a way to learn the language.
 
 ## Details
-Implements a simplistic command-line version of the game, Balatro (https://www.playbalatro.com), written in Rust.  The game can be run in a normal terminal, or via a JavaScript xterm.js in a browser.  Will be hosting the javascript terminal version on my github pages (mfacelle.github.io).
+Balatro: https://www.playbalatro.com.  This version of the game can be built/run in a normal terminal, or via a JavaScript xterm.js in a browser.  Will be hosting the javascript terminal version on my github pages (mfacelle.github.io).
 
-Created some basic modules for data management (decks, cards, etc), and I/O (prompts and input handling).
+Created some basic modules for data management (decks, cards, etc), and I/O (prompts and input handling).  Used some AI assisted coding for getting started and figuring out the web and xterm.js integration part of it.
 
-Currently working on preparing for xterm.js and wasm support, which requires updating how input handling is done to make it asynchronous and not blocking calls.
 
 ## Running
 Run this on a command line with:
