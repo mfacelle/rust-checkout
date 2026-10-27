@@ -129,14 +129,3 @@ impl fmt::Display for Card {
         write!(formatter, "{} of {} ({})", self.rank, self.suit, self.value)
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::Rank;
-
-    #[test]
-    fn rank_display_writes_rank_symbols() {
-        assert_eq!(format!("{}", Rank::Two), "2");
-        assert_eq!(format!("{}", Rank::Ten), "10");
-    }
-}

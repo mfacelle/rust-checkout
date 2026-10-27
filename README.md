@@ -6,7 +6,7 @@ Implements a simplistic command-line version of the game, Balatro (https://www.p
 
 Created some basic modules for data management (decks, cards, etc), and I/O (prompts and input handling).
 
-Will eventually figure out a way to compile this for WASM and incorporate I/O from xterm.js, so this can run in a browser via my github.io page.
+Currently working on preparing for xterm.js and wasm support, which requires updating how input handling is done to make it asynchronous and not blocking calls.
 
 ## Running
 Run this on a command line with:
@@ -15,4 +15,4 @@ Run this on a command line with:
 cargo run
 ```
 
-Hopefully the game itself provides enough information in the prompts to make it clear how to play.
+The game itself should provide enough information to make it clear how to play it.
