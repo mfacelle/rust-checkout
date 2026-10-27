@@ -11,8 +11,9 @@
 
     <div id="terminal" style="width: 100%; height: 500px;"></div>
 
-    <!-- TODO need to add stuff to integrate with Rust -->
     <script type="module">
+        import init, { WasmTerminalGame } from './rust_checkout.js';
+
         const term = new Terminal({
             cursorBlink: true,
             theme: { background: '#1e1e1e' },
@@ -29,32 +30,38 @@
 
         try {
             await init();
-            const game = new TerminalGame();
+            const game = new WasmTerminalGame();
             writeOutput(game.start());
 
             let currentLine = '';
             let previousWasCarriageReturn = false;
             term.onData((data) => {
                 for (const character of data) {
+                    // handle regular newline (not entirely sure what this is doing differntly)
                     if (character === '\n' && previousWasCarriageReturn) {
                         previousWasCarriageReturn = false;
                         continue;
                     }
 
                     previousWasCarriageReturn = character === '\r';
+                    
                     if (character === '\r' || character === '\n') {
+                        // on newline, pass completed line to the game
                         term.write('\r\n');
                         writeOutput(game.input(currentLine));
                         currentLine = '';
                     } else if (character === '\u007F') {
+                        // backspace, remove last character from current line
                         if (currentLine.length > 0) {
                             currentLine = Array.from(currentLine).slice(0, -1).join('');
                             term.write('\b \b');
                         }
                     } else if (character === '\u0003') {
+                        // ctrl+c, clear line and give a new prompt
                         currentLine = '';
                         term.write('^C\r\n> ');
                     } else {
+                        // append character to current line
                         currentLine += character;
                         term.write(character);
                     }

@@ -19,7 +19,6 @@ fn main() -> io::Result<()> {
     // process lines as player inputs them, and pass them to the game.
     // this is done so that xterm.js, which will provide inputs asynchronously,
     // can be handled as well as stdin.
-    // TODO incorporate xterm.js support
     let mut input = String::new();
     while !game.is_finished() {
         input.clear();
