@@ -67,7 +67,6 @@ impl Deck {
     }
 }
 
-
 // AI-generated tests for Deck (kind of overkill for how simple this class is...)
 #[cfg(test)]
 mod tests {

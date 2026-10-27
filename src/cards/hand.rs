@@ -110,7 +110,6 @@ fn get_hand_multiplier(hand: &PokerHand) -> u32 {
     }
 }
 
-
 // represents a hand of cards which can have a max size.
 #[derive(Debug)]
 pub struct Hand {
@@ -190,11 +189,12 @@ impl Hand {
         let hand_multiplier = get_hand_multiplier(&hand_type);
 
         // return both the hand type and value
-        (hand_type, 
-            hand_value_sum * hand_point_value * hand_multiplier)
+        (
+            hand_type,
+            hand_value_sum * hand_point_value * hand_multiplier,
+        )
     }
 }
-
 
 // hand display
 impl fmt::Display for PokerHand {
@@ -213,7 +213,6 @@ impl fmt::Display for PokerHand {
         formatter.write_str(name)
     }
 }
-
 
 // AI-generated tests. could probably add better and more test cases
 #[cfg(test)]
