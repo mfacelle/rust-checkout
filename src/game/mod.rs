@@ -73,7 +73,7 @@ impl<O: Write> Game<O> {
                 writeln!(self.output, "Drawing cards...")?;
 
                 // brief pause, for dramatic effect
-                thread::sleep(Duration::from_millis(500));
+                // thread::sleep(Duration::from_millis(500));
 
                 for _ in 0..self.hand.max_size() {
                     if let Some(card) = self.deck.draw() {
@@ -166,7 +166,7 @@ impl<O: Write> Game<O> {
                     writeln!(self.output, "You have no cards to discard!")?;
 
                     // brief delay to allow player to see error better
-                    thread::sleep(Duration::from_secs(1));
+                    // thread::sleep(Duration::from_secs(1));
                     self.display_turn()?;
                 } else {
                     writeln!(
@@ -184,7 +184,7 @@ impl<O: Write> Game<O> {
                     writeln!(self.output, "You have no cards to play!")?;
 
                     // brief delay to allow player to see error better
-                    thread::sleep(Duration::from_secs(1));
+                    // thread::sleep(Duration::from_secs(1));
                     self.display_turn()?;
                 } else {
                     writeln!(
@@ -204,7 +204,7 @@ impl<O: Write> Game<O> {
                 writeln!(self.output, "Unknown command: {command}")?;
 
                 // brief delay to allow player to see error better
-                thread::sleep(Duration::from_secs(1));
+                // thread::sleep(Duration::from_secs(1));
                 self.display_turn()?;
             }
         }
@@ -236,13 +236,13 @@ impl<O: Write> Game<O> {
                     Err(err) => {
                         writeln!(self.output, "{err}")?;
                         // brief delay to allow player to see error better
-                        thread::sleep(Duration::from_secs(1));
+                        // thread::sleep(Duration::from_secs(1));
                     }
                 },
                 None => {
                     writeln!(self.output, "Invalid index: {index}")?;
                     // brief delay to allow player to see error better
-                    thread::sleep(Duration::from_secs(1));
+                    // thread::sleep(Duration::from_secs(1));
                 }
             }
         }
@@ -261,7 +261,7 @@ impl<O: Write> Game<O> {
             writeln!(self.output, "Your hand is full!")?;
 
             // brief delay to allow player to see error better
-            thread::sleep(Duration::from_secs(1));
+            // thread::sleep(Duration::from_secs(1));
         }
         Ok(())
     }
@@ -286,14 +286,14 @@ impl<O: Write> Game<O> {
             writeln!(self.output, "You can only play up to 5 cards!")?;
 
             // brief delay to allow player to see error better
-            thread::sleep(Duration::from_secs(1));
+            // thread::sleep(Duration::from_secs(1));
             return Ok(0);
         } else if indices.is_empty() {
             writeln!(self.output)?;
             writeln!(self.output, "You must play at least one card!")?;
 
             // brief delay to allow player to see error better
-            thread::sleep(Duration::from_secs(1));
+            // thread::sleep(Duration::from_secs(1));
             return Ok(0);
         }
 
@@ -310,13 +310,13 @@ impl<O: Write> Game<O> {
                     Err(err) => {
                         writeln!(self.output, "{err}")?;
                         // brief delay to allow player to see error better
-                        thread::sleep(Duration::from_secs(1));
+                        // thread::sleep(Duration::from_secs(1));
                     }
                 },
                 None => {
                     writeln!(self.output, "Invalid index: {index}")?;
                     // brief delay to allow player to see error better
-                    thread::sleep(Duration::from_secs(1));
+                    // thread::sleep(Duration::from_secs(1));
                 }
             }
         }
@@ -337,7 +337,7 @@ impl<O: Write> Game<O> {
         )?;
 
         // brief delay to allow player to see it better
-        thread::sleep(Duration::from_secs(2));
+        // thread::sleep(Duration::from_secs(2));
         Ok(hand_value)
     }
 
