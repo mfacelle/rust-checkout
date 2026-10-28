@@ -14,6 +14,8 @@
     <script type="module">
         import init, { WasmTerminalGame } from './rust_checkout.js';
 
+        init_panic_hook();
+        
         const term = new Terminal({
             cursorBlink: true,
             theme: { background: '#1e1e1e' },
@@ -31,7 +33,6 @@
         try {
             await init();
             const game = new WasmTerminalGame();
-            init_panic_hook();
 
             writeOutput(game.start());
 
