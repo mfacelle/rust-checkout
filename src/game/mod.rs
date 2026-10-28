@@ -2,8 +2,8 @@ use crate::cards::card::{rank_symbol, suit_symbol, Suit};
 use crate::cards::deck::Deck;
 use crate::cards::hand::Hand;
 use std::io::{self, Write};
-use std::thread;
-use std::time::Duration;
+// use std::thread;
+// use std::time::Duration;
 
 #[derive(Clone, Copy)]
 enum GameState {
@@ -22,6 +22,11 @@ pub struct Game<O> {
     state: GameState,
     total_points: u32,
 }
+
+// TODO had to remove any sleep calls for this to run properly as a wasm.
+// they were mainly there for dramatic effect, or to see errors better before
+// the next turn prompt appears.  Instead, added "!!!" to the beginning so they're
+// at least a bit more noticeable.  It works for now.
 
 impl<O: Write> Game<O> {
     /// construct a new game with the deck, hand, and output provided
@@ -163,7 +168,7 @@ impl<O: Write> Game<O> {
             "discard" => {
                 if self.hand.current_size() == 0 {
                     writeln!(self.output)?;
-                    writeln!(self.output, "You have no cards to discard!")?;
+                    writeln!(self.output, "!!! You have no cards to discard!")?;
 
                     // brief delay to allow player to see error better
                     // thread::sleep(Duration::from_secs(1));
@@ -181,7 +186,7 @@ impl<O: Write> Game<O> {
             "play" => {
                 if self.hand.current_size() == 0 {
                     writeln!(self.output)?;
-                    writeln!(self.output, "You have no cards to play!")?;
+                    writeln!(self.output, "!!! You have no cards to play!")?;
 
                     // brief delay to allow player to see error better
                     // thread::sleep(Duration::from_secs(1));
@@ -201,7 +206,8 @@ impl<O: Write> Game<O> {
             }
             "" => self.display_turn()?,
             command => {
-                writeln!(self.output, "Unknown command: {command}")?;
+                writeln!(self.output)?;
+                writeln!(self.output, "!!! Unknown command: {command}")?;
 
                 // brief delay to allow player to see error better
                 // thread::sleep(Duration::from_secs(1));
@@ -234,13 +240,15 @@ impl<O: Write> Game<O> {
                 Some(hand_index) => match self.hand.discard_card(hand_index) {
                     Ok(card) => writeln!(self.output, "Discarding {card}")?,
                     Err(err) => {
-                        writeln!(self.output, "{err}")?;
+                        writeln!(self.output)?;
+                        writeln!(self.output, "!!! {err}")?;
                         // brief delay to allow player to see error better
                         // thread::sleep(Duration::from_secs(1));
                     }
                 },
                 None => {
-                    writeln!(self.output, "Invalid index: {index}")?;
+                    writeln!(self.output)?;
+                    writeln!(self.output, "!!! Invalid index: {index}")?;
                     // brief delay to allow player to see error better
                     // thread::sleep(Duration::from_secs(1));
                 }
@@ -258,7 +266,7 @@ impl<O: Write> Game<O> {
             }
         } else {
             writeln!(self.output)?;
-            writeln!(self.output, "Your hand is full!")?;
+            writeln!(self.output, "!!! Your hand is full!")?;
 
             // brief delay to allow player to see error better
             // thread::sleep(Duration::from_secs(1));
@@ -283,14 +291,14 @@ impl<O: Write> Game<O> {
         // ensure valid number of cards played
         if indices.len() > 5 {
             writeln!(self.output)?;
-            writeln!(self.output, "You can only play up to 5 cards!")?;
+            writeln!(self.output, "!!! You can only play up to 5 cards!")?;
 
             // brief delay to allow player to see error better
             // thread::sleep(Duration::from_secs(1));
             return Ok(0);
         } else if indices.is_empty() {
             writeln!(self.output)?;
-            writeln!(self.output, "You must play at least one card!")?;
+            writeln!(self.output, "!!! You must play at least one card!")?;
 
             // brief delay to allow player to see error better
             // thread::sleep(Duration::from_secs(1));
@@ -308,13 +316,15 @@ impl<O: Write> Game<O> {
                         played_cards.push(card);
                     }
                     Err(err) => {
-                        writeln!(self.output, "{err}")?;
+                        writeln!(self.output)?;
+                        writeln!(self.output, "!!! {err}")?;
                         // brief delay to allow player to see error better
                         // thread::sleep(Duration::from_secs(1));
                     }
                 },
                 None => {
-                    writeln!(self.output, "Invalid index: {index}")?;
+                    writeln!(self.output)?;
+                    writeln!(self.output, "!!! Invalid index: {index}")?;
                     // brief delay to allow player to see error better
                     // thread::sleep(Duration::from_secs(1));
                 }
@@ -330,11 +340,13 @@ impl<O: Write> Game<O> {
         writeln!(self.output)?;
 
         let (hand_type, hand_value) = played_hand.score_hand();
+        writeln!(self.output)?;
         writeln!(
             self.output,
             "You played a {} worth {} points!",
             hand_type, hand_value
         )?;
+        writeln!(self.output)?;
 
         // brief delay to allow player to see it better
         // thread::sleep(Duration::from_secs(2));

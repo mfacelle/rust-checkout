@@ -47,6 +47,7 @@ impl WasmTerminalGame {
     /// start the game (callable via javascript)
     pub fn start(&mut self) -> Result<String, JsValue> {
 
+        // added to get better error messages/debugging (not sure if it's really working, though)
         console_error_panic_hook::set_once();
 
         self.game
