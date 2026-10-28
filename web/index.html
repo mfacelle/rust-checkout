@@ -31,8 +31,8 @@
         try {
             await init();
             const game = new WasmTerminalGame();
-            game.init_panic_hook();
-            
+            init_panic_hook();
+
             writeOutput(game.start());
 
             let currentLine = '';
