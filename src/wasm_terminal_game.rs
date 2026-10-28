@@ -28,10 +28,6 @@ pub struct WasmTerminalGame {
     output: Rc<RefCell<Vec<u8>>>,
 }
 
-#[wasm_bindgen]
-pub fn init_panic_hook() {
-    console_error_panic_hook::set_once();
-}
 
 #[wasm_bindgen]
 impl WasmTerminalGame {
@@ -50,6 +46,9 @@ impl WasmTerminalGame {
 
     /// start the game (callable via javascript)
     pub fn start(&mut self) -> Result<String, JsValue> {
+
+        console_error_panic_hook::set_once();
+
         self.game
             .start_game()
             .map_err(|error| JsValue::from_str(&error.to_string()))?;
