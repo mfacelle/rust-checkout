@@ -30,6 +30,12 @@ pub struct WasmTerminalGame {
 
 #[wasm_bindgen]
 impl WasmTerminalGame {
+
+    #[wasm_bindgen]
+    pub fn init_panic_hook() {
+        console_error_panic_hook::set_once();
+    }
+
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         // set up inputs for the game and terminal, but don't start it yet
