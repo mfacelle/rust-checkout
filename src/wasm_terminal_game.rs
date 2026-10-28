@@ -29,12 +29,12 @@ pub struct WasmTerminalGame {
 }
 
 #[wasm_bindgen]
-impl WasmTerminalGame {
+pub fn init_panic_hook() {
+    console_error_panic_hook::set_once();
+}
 
-    #[wasm_bindgen]
-    pub fn init_panic_hook() {
-        console_error_panic_hook::set_once();
-    }
+#[wasm_bindgen]
+impl WasmTerminalGame {
 
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
